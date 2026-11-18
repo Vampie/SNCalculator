@@ -189,6 +189,53 @@
       .bar { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 1px 0 var(--ink); }
       .tile, .story { border: 2px solid var(--ink); }
     }
+
+    /* Lightbox: screenshots open over the page, with previous/next */
+    html:has(.lightbox[open]) { overflow: hidden; }
+    .lightbox {
+      width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none;
+      margin: 0; padding: 0; border: 0; background: transparent; color: #ffffff;
+    }
+    .lightbox[open] { display: grid; place-items: center; }
+    .lightbox::backdrop { background: rgba(10, 10, 10, 0.86); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .lb-figure { margin: 0; display: grid; justify-items: center; gap: 0.8rem; }
+    .lb-figure img {
+      display: block; width: auto; height: auto;
+      max-width: calc(100vw - 8.5rem); max-height: calc(100vh - 7rem); max-height: calc(100dvh - 7rem);
+      border-radius: 10px; background: #ffffff; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-user-drag: none;
+      transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .lb-figure figcaption { color: rgba(255, 255, 255, 0.85); font-size: 0.9375rem; letter-spacing: 0.005em; }
+    .lb-btn {
+      position: fixed; z-index: 1; width: 48px; height: 48px; padding: 0;
+      display: grid; place-items: center; border: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16); color: #ffffff; cursor: pointer;
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+      transition: transform 100ms ease-out, background-color 150ms ease;
+    }
+    .lb-btn:hover { background: rgba(255, 255, 255, 0.28); }
+    .lb-btn:active { transform: scale(0.94); }
+    .lb-btn svg { width: 22px; height: 22px; }
+    .lb-btn:focus-visible { outline-color: #ffffff; }
+    .lb-prev { left: 1.25rem; top: 50%; margin-top: -24px; }
+    .lb-next { right: 1.25rem; top: 50%; margin-top: -24px; }
+    .lb-close { right: 1.25rem; top: 1.25rem; }
+    .lightbox[open] .lb-figure { animation: lb-in 220ms ease-out; }
+    .lightbox[open]::backdrop { animation: lb-fade 220ms ease-out; }
+    @keyframes lb-in { from { opacity: 0; transform: scale(0.96); } }
+    @keyframes lb-fade { from { opacity: 0; } }
+    @media (max-width: 560px) {
+      .lb-figure img { max-width: calc(100vw - 2rem); max-height: calc(100dvh - 9.5rem); }
+      .lb-prev, .lb-next { top: auto; bottom: 1.25rem; margin-top: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lb-figure img, .lb-btn { transition: none; }
+      .lightbox[open] .lb-figure, .lightbox[open]::backdrop { animation: none; }
+    }
+    @media (prefers-contrast: more) {
+      .lb-btn { background: #000000; border: 2px solid #ffffff; }
+    }
   </style>
 </head>
 <body>
@@ -196,8 +243,8 @@
   <div class="bar-inner">
     <a class="brand" href="#top"><img src="icon.png" alt="">SNCalculator</a>
     <nav aria-label="Sections">
-      <a href="#screenshots">Screenshots</a>
       <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
       <a href="#install">Install</a>
     </nav>
     <a class="button primary small" href="https://github.com/Vampie/SNCalculator/releases/latest/download/SNCalculator.snplg">Download</a>
@@ -220,33 +267,6 @@
       <a class="button" href="https://github.com/Vampie/SNCalculator">Source on GitHub</a>
     </div>
     <p class="note">Free and open source. So far only tested on a Supernote Nomad (A6X2).</p>
-  </section>
-
-  <section id="screenshots" aria-labelledby="screenshots-title">
-    <h2 id="screenshots-title">On the Nomad</h2>
-    <p class="lead">Black and white, large keys, no animations. Tap a screenshot to see it full size.</p>
-    <div class="gallery">
-      <figure>
-        <a href="screenshots/Main_Basic.png"><div class="device"><img src="screenshots/Main_Basic.png" width="1404" height="1872" loading="lazy" alt="The Basic keypad with the result 4 280"></div></a>
-        <figcaption>Basic keypad</figcaption>
-      </figure>
-      <figure>
-        <a href="screenshots/Main_Adv_Norm.png"><div class="device"><img src="screenshots/Main_Adv_Norm.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with scientific functions and a normal result"></div></a>
-        <figcaption>Adv keypad, NORM</figcaption>
-      </figure>
-      <figure>
-        <a href="screenshots/Main_Adv_Sci.png"><div class="device"><img src="screenshots/Main_Adv_Sci.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with a result in scientific notation"></div></a>
-        <figcaption>Adv keypad, SCI</figcaption>
-      </figure>
-      <figure>
-        <a href="screenshots/Tape.png"><div class="device"><img src="screenshots/Tape.png" width="1404" height="1872" loading="lazy" alt="The tape with two selected calculations"></div></a>
-        <figcaption>The tape</figcaption>
-      </figure>
-      <figure>
-        <a href="screenshots/Inserted_Results.png"><div class="device"><img src="screenshots/Inserted_Results.png" width="1404" height="1872" loading="lazy" alt="Calculations inserted as text into a handwritten note"></div></a>
-        <figcaption>Inserted into a note</figcaption>
-      </figure>
-    </div>
   </section>
 
   <section id="features" aria-labelledby="features-title">
@@ -280,6 +300,33 @@
     </div>
   </section>
 
+  <section id="screenshots" aria-labelledby="screenshots-title">
+    <h2 id="screenshots-title">On the Nomad</h2>
+    <p class="lead">Black and white, large keys, no animations. Tap a screenshot to see it full size.</p>
+    <div class="gallery">
+      <figure>
+        <a href="screenshots/Main_Basic.png"><div class="device"><img src="screenshots/Main_Basic.png" width="1404" height="1872" loading="lazy" alt="The Basic keypad with the result 4 280"></div></a>
+        <figcaption>Basic keypad</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/Main_Adv_Norm.png"><div class="device"><img src="screenshots/Main_Adv_Norm.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with scientific functions and a normal result"></div></a>
+        <figcaption>Adv keypad, NORM</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/Main_Adv_Sci.png"><div class="device"><img src="screenshots/Main_Adv_Sci.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with a result in scientific notation"></div></a>
+        <figcaption>Adv keypad, SCI</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/Tape.png"><div class="device"><img src="screenshots/Tape.png" width="1404" height="1872" loading="lazy" alt="The tape with two selected calculations"></div></a>
+        <figcaption>The tape</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/Inserted_Results.png"><div class="device"><img src="screenshots/Inserted_Results.png" width="1404" height="1872" loading="lazy" alt="Calculations inserted as text into a handwritten note"></div></a>
+        <figcaption>Inserted into a note</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <section id="install" aria-labelledby="install-title">
     <h2 id="install-title">Install</h2>
     <ol class="steps" style="margin-top: 2rem">
@@ -307,12 +354,89 @@
   <a href="https://github.com/Vampie/SNCalculator/releases">Releases</a>
 </footer>
 
+<dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+  <figure class="lb-figure">
+    <img id="lb-img" alt="" draggable="false">
+    <figcaption id="lb-caption" aria-live="polite"></figcaption>
+  </figure>
+  <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Previous screenshot">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Next screenshot">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</dialog>
+
 <script>
   // Show the bar's hairline only once content scrolls underneath it.
   const bar = document.getElementById('bar');
   const update = () => bar.classList.toggle('scrolled', window.scrollY > 4);
   addEventListener('scroll', update, {passive: true});
   update();
+
+  // Lightbox. Without JavaScript (or <dialog>) the links simply open the image.
+  const links = [...document.querySelectorAll('.gallery a')];
+  const dialog = document.getElementById('lightbox');
+  const img = document.getElementById('lb-img');
+  const caption = document.getElementById('lb-caption');
+  let index = 0;
+
+  function show(i) {
+    index = (i + links.length) % links.length; // wraps around at both ends
+    const link = links[index];
+    img.src = link.href;
+    img.alt = link.querySelector('img').alt;
+    caption.textContent =
+      `${link.closest('figure').querySelector('figcaption').textContent} · ${index + 1} / ${links.length}`;
+    for (const j of [index - 1, index + 1]) new Image().src = links[(j + links.length) % links.length].href;
+  }
+
+  if (typeof dialog.showModal === 'function') {
+    links.forEach((link, i) => link.addEventListener('click', e => {
+      e.preventDefault();
+      show(i);
+      dialog.showModal();
+    }));
+    document.getElementById('lb-prev').addEventListener('click', () => show(index - 1));
+    document.getElementById('lb-next').addEventListener('click', () => show(index + 1));
+    document.getElementById('lb-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+    // A tap on the dark area around the image closes the viewer.
+    dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+
+    // Swipe: the image follows the finger, then the direction of the flick decides.
+    let startX = null, lastX = 0, lastT = 0, velocity = 0;
+    img.addEventListener('pointerdown', e => {
+      startX = lastX = e.clientX; lastT = e.timeStamp; velocity = 0;
+      img.setPointerCapture(e.pointerId);
+      img.style.transition = 'none';
+    });
+    img.addEventListener('pointermove', e => {
+      if (startX === null) return;
+      velocity = (e.clientX - lastX) / Math.max(1, e.timeStamp - lastT); // px per ms
+      lastX = e.clientX; lastT = e.timeStamp;
+      img.style.transform = `translateX(${e.clientX - startX}px)`;
+    });
+    const release = (e, cancelled) => {
+      if (startX === null) return;
+      const dx = e.clientX - startX;
+      startX = null;
+      img.style.transition = '';
+      img.style.transform = '';
+      if (cancelled) return;
+      // Ignore small nudges; past 30px a quick flick or a long drag changes the image.
+      const swipe = Math.abs(dx) < 30 ? 0 : Math.abs(velocity) > 0.3 ? velocity : Math.abs(dx) > 60 ? dx : 0;
+      if (swipe) show(index + (swipe < 0 ? 1 : -1));
+    };
+    img.addEventListener('pointerup', e => release(e, false));
+    img.addEventListener('pointercancel', e => release(e, true));
+  }
 </script>
 </body>
 </html>
