@@ -1,4 +1,26 @@
-# SNCalculator
+<p align="center">
+  <img src="assets/icon.png" width="72" alt="SNCalculator icon">
+</p>
+
+<h1 align="center">SNCalculator</h1>
+
+<p align="center">
+  <b>A calculator for your Supernote, right inside your notes.</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Supernote-plugin-000000" alt="Supernote plugin">
+  <img src="https://img.shields.io/badge/tested%20on-Nomad%20(A6X2)-000000" alt="Tested on Nomad (A6X2)">
+  <img src="https://img.shields.io/badge/React%20Native-0.79.2-000000" alt="React Native 0.79.2">
+</p>
+
+<blockquote>
+  <p align="center">
+    ✏️ <i>While I do math exercises with my daughter on my Nomad,<br>
+    we sometimes need a calculator to check our answers.<br>
+    So I built one, with the help of <a href="https://claude.ai">Claude</a>.</i> 🧮
+  </p>
+</blockquote>
 
 A calculator plugin for **Supernote** e-ink devices (Nomad, Manta, A5X, A6X).
 It opens from the toolbar of a note or document, and puts results or whole
