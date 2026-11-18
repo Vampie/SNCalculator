@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SNCalculator</title>
+  <meta name="description" content="A calculator plugin for Supernote that puts results and calculations straight into your notes.">
+  <link rel="icon" href="icon.png">
+  <style>
+    :root {
+      --ink: #111111;
+      --paper: #ffffff;
+      --muted: #555555;
+      --line: #111111;
+      --soft: #f2f2f0;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink: #ececec;
+        --paper: #161616;
+        --muted: #a8a8a8;
+        --line: #ececec;
+        --soft: #222222;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 48px 20px 64px; }
+    a { color: inherit; }
+
+    header { text-align: center; }
+    header img.icon {
+      width: 72px; height: 72px;
+      padding: 10px; border: 3px solid var(--line); border-radius: 18px;
+      background: #ffffff;
+    }
+    h1 { font-size: 44px; line-height: 1.1; margin: 20px 0 8px; letter-spacing: -0.02em; }
+    .tagline { font-size: 20px; margin: 0; }
+
+    .story {
+      max-width: 620px; margin: 32px auto 0; padding: 18px 24px;
+      border-left: 4px solid var(--line); background: var(--soft);
+      font-style: italic; text-align: left;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+    .button {
+      display: inline-block; padding: 12px 22px; border: 3px solid var(--line); border-radius: 12px;
+      font-weight: 700; text-decoration: none;
+    }
+    .button.primary { background: var(--ink); color: var(--paper); }
+    .button:hover { text-decoration: underline; }
+    .note { margin-top: 14px; text-align: center; color: var(--muted); font-size: 15px; }
+
+    h2 { font-size: 26px; margin: 64px 0 16px; padding-bottom: 6px; border-bottom: 3px solid var(--line); }
+
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    figure { margin: 0; }
+    figure img {
+      display: block; width: 100%; height: auto;
+      border: 3px solid var(--line); border-radius: 12px; background: #ffffff;
+    }
+    figcaption { margin-top: 8px; text-align: center; font-size: 15px; color: var(--muted); }
+
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.92em;
+      padding: 1px 6px; border: 1px solid var(--line); border-radius: 6px;
+    }
+
+    footer {
+      margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line);
+      text-align: center; color: var(--muted); font-size: 15px;
+    }
+
+    @media (max-width: 520px) {
+      main { padding-top: 32px; }
+      h1 { font-size: 34px; }
+      .tagline { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img class="icon" src="icon.png" alt="">
+    <h1>SNCalculator</h1>
+    <p class="tagline">A calculator for your Supernote, right inside your notes.</p>
+
+    <p class="story">
+      While I do math exercises with my daughter on my Nomad, we sometimes need a calculator
+      to check our answers. So I built one, with the help of <a href="https://claude.ai">Claude</a>.
+    </p>
+
+    <div class="actions">
+      <a class="button primary" href="https://github.com/Vampie/SNCalculator/releases/latest/download/SNCalculator.snplg">Download SNCalculator.snplg</a>
+      <a class="button" href="https://github.com/Vampie/SNCalculator">Source on GitHub</a>
+    </div>
+    <p class="note">Free and open source. So far only tested on a Supernote Nomad (A6X2).</p>
+  </header>
+
+  <h2>Screenshots</h2>
+  <div class="gallery">
+    <figure>
+      <img src="screenshots/Main_Basic.png" width="1404" height="1872" loading="lazy" alt="The Basic keypad with the result 4 280">
+      <figcaption>Basic keypad</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/Main_Adv_Norm.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with scientific functions and a normal result">
+      <figcaption>Adv keypad, NORM display</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/Main_Adv_Sci.png" width="1404" height="1872" loading="lazy" alt="The Adv keypad with a result in scientific notation">
+      <figcaption>Adv keypad, SCI display</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/Tape.png" width="1404" height="1872" loading="lazy" alt="The tape with two selected calculations">
+      <figcaption>The tape: select lines to insert</figcaption>
+    </figure>
+    <figure>
+      <img src="screenshots/Inserted_Results.png" width="1404" height="1872" loading="lazy" alt="Calculations inserted as text into a handwritten note">
+      <figcaption>Calculations inserted into a note</figcaption>
+    </figure>
+  </div>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Opens from the toolbar in a note or a document, full screen, and closes with the ✕.</li>
+    <li>A Basic keypad, and an Adv keypad with sin, cos and tan and their inverses, log, ln, roots, powers, factorial, π, e and scientific notation.</li>
+    <li>Two ways to calculate. <b>Expr</b>: type the whole expression, with the usual precedence and parentheses. <b>Step</b>: like a pocket calculator, left to right, so 2 + 3 × 4 gives 20.</li>
+    <li>Square roots stay exact when possible: √50 shows as 5√2, with the decimal value underneath.</li>
+    <li>Degrees or radians, and normal or scientific display.</li>
+    <li>Thousands are grouped with a space, and the decimal sign follows your device language.</li>
+    <li>Every result goes on a tape. Select lines there and insert only their results, or the full calculations.</li>
+    <li>Inserted text is an ordinary text box in the middle of the page: move it with the lasso or edit it.</li>
+    <li>A help screen behind the <b>?</b> button explains every key.</li>
+  </ul>
+
+  <h2>Install</h2>
+  <ol>
+    <li>Download <code>SNCalculator.snplg</code> with the button above.</li>
+    <li>Connect your Supernote by USB and copy the file to the <code>MyStyle</code> folder.</li>
+    <li>On the device, go to <b>Settings → Apps → Plugins → Add Plugin</b>, pick the file and install it.</li>
+    <li>Open a note or a document: the calculator icon is now in the toolbar.</li>
+  </ol>
+  <p>The first time you insert something, the device asks permission to change the note. Allow it to go on.</p>
+
+  <h2>Good to know</h2>
+  <ul>
+    <li>Inserting only works in notes. PDFs and other documents don't accept text boxes from plugins, so there it is a calculator only.</li>
+    <li>So far it is only tested on a Supernote Nomad (A6X2). The layout and the size of the inserted text may need tuning on other models. Tried it on another device? Let me know in an <a href="https://github.com/Vampie/SNCalculator/issues">issue</a>.</li>
+    <li>The tape survives closing the calculator, but not a restart of the device.</li>
+  </ul>
+
+  <footer>
+    Made by Vampie with Claude ·
+    <a href="https://github.com/Vampie/SNCalculator">Source</a> ·
+    <a href="https://github.com/Vampie/SNCalculator/releases">Releases</a>
+  </footer>
+</main>
+</body>
+</html>

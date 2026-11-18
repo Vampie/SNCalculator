@@ -36,13 +36,13 @@ Built with the official Supernote plugin SDK
 
 <table>
   <tr>
-    <td align="center"><img src="assets/Main_Basic.png" width="260" alt="Basic keypad"><br><sub><b>Basic</b> keypad</sub></td>
-    <td align="center"><img src="assets/Main_Adv_Norm.png" width="260" alt="Adv keypad with a normal result"><br><sub><b>Adv</b> keypad, NORM display</sub></td>
-    <td align="center"><img src="assets/Main_Adv_Sci.png" width="260" alt="Adv keypad with a result in scientific notation"><br><sub><b>Adv</b> keypad, SCI display</sub></td>
+    <td align="center"><img src="docs/screenshots/Main_Basic.png" width="260" alt="Basic keypad"><br><sub><b>Basic</b> keypad</sub></td>
+    <td align="center"><img src="docs/screenshots/Main_Adv_Norm.png" width="260" alt="Adv keypad with a normal result"><br><sub><b>Adv</b> keypad, NORM display</sub></td>
+    <td align="center"><img src="docs/screenshots/Main_Adv_Sci.png" width="260" alt="Adv keypad with a result in scientific notation"><br><sub><b>Adv</b> keypad, SCI display</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="assets/Tape.png" width="260" alt="Tape with two selected lines"><br><sub><b>Tape</b>: select lines to insert</sub></td>
-    <td align="center"><img src="assets/Inserted_Results.png" width="260" alt="Calculations inserted into a note"><br><sub>Calculations <b>inserted</b> into a note</sub></td>
+    <td align="center"><img src="docs/screenshots/Tape.png" width="260" alt="Tape with two selected lines"><br><sub><b>Tape</b>: select lines to insert</sub></td>
+    <td align="center"><img src="docs/screenshots/Inserted_Results.png" width="260" alt="Calculations inserted into a note"><br><sub>Calculations <b>inserted</b> into a note</sub></td>
     <td></td>
   </tr>
 </table>
