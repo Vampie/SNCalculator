@@ -25,8 +25,7 @@ async function ensureWritePermission(): Promise<void> {
 
 /**
  * Inserts `text` as a text box in the middle of the current note page.
- * shortcut: several lines go in one box separated by \n (untested on a device);
- * if the Nomad shows them on one line, insert one box per line instead.
+ * Several lines go in one box separated by \n (shown as separate lines on the Nomad).
  */
 export async function insertIntoNote(text: string): Promise<void> {
   await ensureWritePermission();
