@@ -1,0 +1,11 @@
+﻿{
+    "pluginID":  "b66w5gkzpttl9vt4",
+    "pluginKey":  "Rekenmachine",
+    "iconPath":  "assets/icon.png",
+    "desc":  "Basic and scientific calculator that inserts the result or the calculation into your note",
+    "name":  "Calculator",
+    "versionCode":  "6",
+    "versionName":  "0.0.6",
+    "jsMainPath":  "index",
+    "uses-permissions":  ["plugin.permission.FILE:WRITE"]
+}
