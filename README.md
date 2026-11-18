@@ -73,8 +73,9 @@ Built with the official Supernote plugin SDK
 
 ## Installation
 
-1. Build the package (see [Building from source](#building-from-source)).
-   You get `build/outputs/SNCalculator.snplg`.
+1. Download `SNCalculator.snplg` from the
+   [latest release](https://github.com/Vampie/SNCalculator/releases/latest),
+   or build it yourself (see [Building from source](#building-from-source)).
 2. Connect the Supernote by USB and copy the `.snplg` file to the **`MyStyle`** folder.
 3. On the device, go to **Settings → Apps → Plugins → Add Plugin**, pick the file and
    install it.
