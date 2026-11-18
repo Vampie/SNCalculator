@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Rekenmachine.app"
-               BlueprintName = "Rekenmachine"
-               ReferencedContainer = "container:Rekenmachine.xcodeproj">
+               BuildableName = "SNCalculator.app"
+               BlueprintName = "SNCalculator"
+               ReferencedContainer = "container:SNCalculator.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RekenmachineTests.xctest"
-               BlueprintName = "RekenmachineTests"
-               ReferencedContainer = "container:Rekenmachine.xcodeproj">
+               BuildableName = "SNCalculatorTests.xctest"
+               BlueprintName = "SNCalculatorTests"
+               ReferencedContainer = "container:SNCalculator.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Rekenmachine.app"
-            BlueprintName = "Rekenmachine"
-            ReferencedContainer = "container:Rekenmachine.xcodeproj">
+            BuildableName = "SNCalculator.app"
+            BlueprintName = "SNCalculator"
+            ReferencedContainer = "container:SNCalculator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Rekenmachine.app"
-            BlueprintName = "Rekenmachine"
-            ReferencedContainer = "container:Rekenmachine.xcodeproj">
+            BuildableName = "SNCalculator.app"
+            BlueprintName = "SNCalculator"
+            ReferencedContainer = "container:SNCalculator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

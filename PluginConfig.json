@@ -1,11 +1,11 @@
 ﻿{
     "pluginID":  "b66w5gkzpttl9vt4",
-    "pluginKey":  "Rekenmachine",
+    "pluginKey":  "SNCalculator",
     "iconPath":  "assets/icon.png",
     "desc":  "Basic and scientific calculator that inserts the result or the calculation into your note",
-    "name":  "Calculator",
-    "versionCode":  "7",
-    "versionName":  "0.0.7",
+    "name":  "SNCalculator",
+    "versionCode":  "8",
+    "versionName":  "0.0.8",
     "jsMainPath":  "index",
     "uses-permissions":  ["plugin.permission.FILE:WRITE"]
 }

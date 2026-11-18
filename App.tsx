@@ -1,5 +1,5 @@
 /**
- * Rekenmachine plugin UI: a full-screen calculator. Past calculations go on a tape
+ * SNCalculator plugin UI: a full-screen calculator. Past calculations go on a tape
  * shown on demand over everything, and can be inserted into the open note.
  *
  * @format

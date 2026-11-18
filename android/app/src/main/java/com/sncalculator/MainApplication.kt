@@ -1,4 +1,4 @@
-package com.rekenmachine
+package com.sncalculator
 
 import android.app.Application
 import com.facebook.react.PackageList
