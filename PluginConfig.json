@@ -4,8 +4,8 @@
     "iconPath":  "assets/icon.png",
     "desc":  "Basic and scientific calculator that inserts the result or the calculation into your note",
     "name":  "Calculator",
-    "versionCode":  "6",
-    "versionName":  "0.0.6",
+    "versionCode":  "7",
+    "versionName":  "0.0.7",
     "jsMainPath":  "index",
     "uses-permissions":  ["plugin.permission.FILE:WRITE"]
 }

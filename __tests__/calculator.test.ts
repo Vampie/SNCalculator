@@ -7,7 +7,12 @@ import {
   pressKey,
   setMode,
 } from '../src/calculator';
-import {exactRoot, formatNumber} from '../src/math';
+import {
+  exactRoot,
+  formatNumber,
+  getDecimalSign,
+  setLanguage,
+} from '../src/math';
 
 /** Presses keys separated by spaces; "45261" types five digit keys. */
 const run = (seq: string, start: CalcState = newCalc()) =>
@@ -64,7 +69,7 @@ describe('Expr mode', () => {
 
   it('writes closed, readable lines on the tape', () => {
     expect(tape('2 × ( 3 + 1 =')).toEqual(['2 × (3 + 1) = 8']);
-    expect(tape('45261 ×10ⁿ ± 2 =')).toEqual(['45261×10⁻² = 452,61']);
+    expect(tape('45261 ×10ⁿ ± 2 =')).toEqual(['45\u00A0261×10⁻² = 452,61']);
     expect(tape('sin 30 =')).toEqual(['sin(30) = 0,5']);
   });
 
@@ -129,7 +134,7 @@ describe('Step mode', () => {
 
   it('accepts scientific notation and negates results', () => {
     expect(tape('45261 ×10ⁿ ± 2 × 2 =', direct)).toEqual([
-      '45261×10⁻² × 2 = 905,22',
+      '45\u00A0261×10⁻² × 2 = 905,22',
     ]);
     expect(main('2 + 3 = ±', direct)).toBe('−5');
   });
@@ -194,13 +199,34 @@ describe('SCI', () => {
 
 describe('negative exponent', () => {
   it('takes − right after ×10ⁿ as the exponent sign', () => {
-    expect(tape('45261 ×10ⁿ − 2 =')).toEqual(['45261×10⁻² = 452,61']);
+    expect(tape('45261 ×10ⁿ − 2 =')).toEqual(['45\u00A0261×10⁻² = 452,61']);
     expect(main('45261 ×10ⁿ − 2 × 2 =', setMode(newCalc(), 'direct'))).toBe(
       '905,22',
     );
   });
 
   it('still subtracts once the exponent has digits', () => {
-    expect(main('2 ×10ⁿ 3 − 1 =')).toBe('1999');
+    expect(main('2 ×10ⁿ 3 − 1 =')).toBe('1\u00A0999');
+  });
+});
+
+describe('number format', () => {
+  afterEach(() => setLanguage('nl'));
+
+  it('groups thousands with a space and uses a comma by default', () => {
+    expect(formatNumber(1234567.5)).toBe('1\u00A0234\u00A0567,5');
+    expect(formatNumber(-1000)).toBe('−1\u00A0000');
+    expect(formatNumber(999)).toBe('999');
+  });
+
+  it('uses a decimal point for English, Chinese, Japanese and Korean', () => {
+    setLanguage('en_US');
+    expect(formatNumber(1234.5)).toBe('1\u00A0234.5');
+    expect(formatNumber(452.61, true)).toBe('4.5261 × 10²');
+    expect(main('1234 , 5 =')).toBe('1\u00A0234.5');
+    setLanguage('zh_CN');
+    expect(getDecimalSign()).toBe('.');
+    setLanguage('nl_BE');
+    expect(getDecimalSign()).toBe(',');
   });
 });

@@ -50,7 +50,10 @@ export const HELP: {title: string; items: [string, string][]}[] = [
       ['⌫', 'Deletes the last thing you typed.'],
       ['( )', 'Parentheses (Expr only). A missing ) is added at =.'],
       ['±', 'Changes the sign of the number, or of the exponent after ×10ⁿ.'],
-      [',', 'Decimal comma.'],
+      [
+        ',',
+        'Decimal sign: a comma or a point, depending on the device language.',
+      ],
       ['Ans', 'The last result.'],
       ['=', 'Calculates the result.'],
     ],
@@ -85,6 +88,11 @@ export const HELP: {title: string; items: [string, string][]}[] = [
       [
         '5√2',
         'Results with a square root are also shown exactly: √50 = 5√2 ≈ 7,07106781187.',
+      ],
+      [
+        '1 234,5',
+        'Thousands are grouped with a space. The decimal sign follows the device language: ' +
+          'a point for English, Chinese, Japanese and Korean, a comma otherwise.',
       ],
       ['a × 10ⁿ', 'Very large or very small numbers are shown as a × 10ⁿ.'],
       [

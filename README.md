@@ -1,97 +1,141 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# SNCalculator
 
-# Getting Started
+A calculator plugin for **Supernote** e-ink devices (Nomad, Manta, A5X, A6X).
+It opens from the toolbar of a note or document, and puts results or whole
+calculations into your note as a text box.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+Built with the official Supernote plugin SDK
+([`sn-plugin-lib`](https://docs.supernote.com/en)) on React Native 0.79.2.
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Features
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Two keypads**: *Basic*, and *Adv* with `sin` `cos` `tan` and their inverses,
+  `log` `ln` `10ˣ` `eˣ` `√` `ⁿ√` `x²` `xʸ` `1/x` `n!` `%` `π` `e` and `×10ⁿ`.
+- **Two ways to calculate**
+  - **Expr**: type the whole expression, then `=`. `×` and `÷` go before `+` and `−`,
+    and parentheses are allowed: `3 + 4 × 2 = 11`.
+  - **Step**: like a pocket calculator, every operation is done at once, left to right:
+    `2 + 3 × 4 = 20`. Each step lands on the tape.
+- **Exact square roots**: `√50 = 5√2 ≈ 7,07106781187`, `sin 45° = √2/2`.
+- **Scientific notation**: type `4,5 ×10ⁿ − 2` for 4,5 × 10⁻², switch between
+  *NORM* and *SCI* display, and between *DEG* and *RAD*.
+- **Local number format**: thousands are grouped with a space (`1 234 567`), and the
+  decimal sign follows the device language (a point for English, Chinese, Japanese
+  and Korean, a comma otherwise).
+- **Tape**: every calculation is kept as a list. Select one or more lines and insert
+  only their results, or the complete calculations.
+- **Insert into your note**: the result, the last calculation or the selected tape
+  lines become an editable text box in the middle of the page.
+- **Built-in help**: the `?` button explains every key.
+- **Made for e-ink**: black and white, large keys, no animations.
 
-```sh
-# Using npm
-npm start
+## Installation
 
-# OR using Yarn
-yarn start
+1. Build the package (see [Building from source](#building-from-source)).
+   You get `build/outputs/Rekenmachine.snplg`.
+2. Connect the Supernote by USB and copy the `.snplg` file to the **`MyStyle`** folder.
+3. On the device, go to **Settings → Apps → Plugins → Add Plugin**, pick the file and
+   install it.
+4. Open a note or a document: the calculator icon is now in the toolbar.
+
+The first time you insert something, the device asks permission to change the note.
+Allow it to go on.
+
+To update, install the new package the same way. It replaces the old version.
+
+## Using it
+
+### Top row
+
+| Control | What it does |
+| --- | --- |
+| `Basic` \| `Adv` | Basic keypad, or Adv with the scientific functions. |
+| `Expr` \| `Step` | Whole expression with precedence, or step by step like a pocket calculator. |
+| `DEG` \| `RAD` | Angles in degrees or radians *(Adv only)*. |
+| `NORM` \| `SCI` | Results as normal numbers, or always as a × 10ⁿ *(Adv only)*. |
+| `?` | Help screen with an explanation of every key. |
+| `✕` | Closes the calculator. Mode, settings and tape are kept. |
+
+### Inserting into a note
+
+| Button | Inserts |
+| --- | --- |
+| `Result` | The last result, for example `5√2`. |
+| `Last calc` | The last calculation. In Step mode: all its steps. |
+| `Tape (n)` | Opens the tape as a list. Tap lines to select them (or *Select all*), then insert their **Result**s or their whole **Calculation**s, one per line. |
+
+For example, three selected tape lines inserted as calculations:
+
+```
+1 + 1 = 2
+2 × 3 = 6
+√(50) = 5√2 ≈ 7,07106781187
 ```
 
-## Step 2: Build and run your app
+The text box lands in the middle of the current page. Move it with the lasso, or
+edit it like any other text box.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Limitations
 
-### Android
+- **Inserting only works in notes.** Documents (PDF, EPUB, …) don't accept text
+  boxes from plugins, so there the calculator only calculates.
+- **Full screen only**: the SDK has no floating or smaller plugin window.
+- **The tape lives in memory**: it survives closing the calculator, but not a
+  restart of the device. The SDK cannot write files.
+- **Exact roots** are recognised for a√n/b with n up to 10 000. Sums such as
+  `1 + √2` stay decimal.
+- Developed and tested on a Supernote Nomad. The text box size may need tuning on
+  other models.
 
-```sh
-# Using npm
-npm run android
+## Building from source
 
-# OR using Yarn
-yarn android
+You need [Node.js](https://nodejs.org) 18 or newer and npm. No Android SDK or JDK is
+needed: this is a pure JavaScript plugin.
+
+```bash
+npm install
+npm test               # engine tests (jest)
+npm run typecheck
+npm run lint
+npm run build:plugin   # → build/outputs/Rekenmachine.snplg
 ```
 
-### iOS
+`npm run build:plugin` runs the official `buildPlugin.ps1` (PowerShell). On macOS or
+Linux, run `./buildPlugin.sh` instead.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+For every new build you install on a device, raise `versionCode` and `versionName` in
+`PluginConfig.json`. Never change `pluginID`: the device would see it as a different
+plugin.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## Project structure
 
-```sh
-bundle install
+```
+├── index.js              Plugin entry: registers the toolbar button for NOTE and DOC
+├── App.tsx               UI: top row, display, keypad, tape list and help screen
+├── src/
+│   ├── math.ts           Operators, functions, number entry, formatting, exact roots
+│   ├── expression.ts     Expr mode: tokens and a recursive-descent evaluator
+│   ├── direct.ts         Step mode: the pocket-calculator state machine
+│   ├── calculator.ts     Whole state: settings, both modes, tape, texts to insert
+│   ├── insertText.ts     Inserts the text box into the open note
+│   ├── textBox.ts        Size and position of that text box
+│   ├── help.ts           Help screen text
+│   └── buttons.ts        Toolbar button ids
+├── __tests__/            Jest tests for the engine and the text box
+├── PluginConfig.json     Plugin name, version and permissions
+└── buildPlugin.ps1/.sh   Official Supernote packaging scripts
 ```
 
-Then, and every time you update your native dependencies, run:
+The calculation engine in `src/` is plain TypeScript without SDK calls, so it is
+fully tested on a PC. Everything that talks to the device sits in `App.tsx`,
+`index.js` and `src/insertText.ts`.
 
-```sh
-bundle exec pod install
-```
+## Permissions
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+| Permission | Why |
+| --- | --- |
+| `plugin.permission.FILE:WRITE` | To insert the text box into the open note. |
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+The plugin does not read your files and does not use the internet.

@@ -6,7 +6,14 @@
  */
 
 import React, {useEffect, useRef, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  I18nManager,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {PluginManager} from 'sn-plugin-lib';
 import {BUTTON_NOTE} from './src/buttons';
 import {
@@ -21,10 +28,22 @@ import {
 } from './src/calculator';
 import {HELP} from './src/help';
 import {insertIntoNote} from './src/insertText';
+import {getDecimalSign, setLanguage} from './src/math';
 
 // Outside React so mode, settings and tape survive closing the plugin:
 // the JS runtime keeps running until PluginHost restarts.
 let saved: CalcState = newCalc();
+
+// The device language decides the decimal sign; registerLangListener only reports later changes.
+try {
+  setLanguage(I18nManager.getConstants().localeIdentifier ?? '');
+} catch {
+  // No locale available: keep the default decimal comma.
+}
+
+/** Help text with the device's decimal sign in its example numbers (written with a comma). */
+const localizeHelp = (text: string) =>
+  text.replace(/(\d),(\d)/g, `$1${getDecimalSign()}$2`);
 
 const BASIC_ROWS = [
   ['C', '⌫', '(', ')'],
@@ -52,10 +71,22 @@ function App(): React.JSX.Element {
   /** Indices of the tape lines selected in the tape list. */
   const [picked, setPicked] = useState<ReadonlySet<number>>(new Set());
   const tapeRef = useRef<ScrollView>(null);
+  /** Only there to re-render when the device language changes. */
+  const [, setLanguageCode] = useState('');
 
   useEffect(() => {
     saved = calc;
   }, [calc]);
+
+  useEffect(() => {
+    const sub = PluginManager.registerLangListener({
+      onMsg: (code: unknown) => {
+        setLanguage(String(code));
+        setLanguageCode(String(code));
+      },
+    });
+    return () => sub.remove();
+  }, []);
 
   useEffect(() => {
     // The SDK replays a press that arrived just before this listener was registered.
@@ -197,7 +228,7 @@ function App(): React.JSX.Element {
                       styles.keyText,
                       SCI_ROWS.includes(row) && styles.keyTextSmall,
                     ]}>
-                    {key}
+                    {key === ',' ? getDecimalSign() : key}
                   </Text>
                 </Pressable>
               ),
@@ -275,8 +306,10 @@ function App(): React.JSX.Element {
                 <Text style={styles.helpHeading}>{section.title}</Text>
                 {section.items.map(([key, text]) => (
                   <View key={key} style={styles.helpRow}>
-                    <Text style={styles.helpKey}>{key}</Text>
-                    <Text style={styles.helpText}>{text}</Text>
+                    <Text style={styles.helpKey}>
+                      {key === ',' ? getDecimalSign() : localizeHelp(key)}
+                    </Text>
+                    <Text style={styles.helpText}>{localizeHelp(text)}</Text>
                   </View>
                 ))}
               </View>

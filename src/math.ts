@@ -1,9 +1,31 @@
 /**
  * Number helpers shared by both calculation modes: keys, operators and functions,
- * typing a number, and formatting results (decimal comma, × 10ⁿ).
+ * typing a number, and formatting results (1 234,5 or 1 234.5, × 10ⁿ).
  */
 
 export const MINUS = '−';
+
+/** Thousands separator: a no-break space, so a number never wraps inside a text box. */
+export const THOUSANDS = '\u00A0';
+// shortcut: decimal point only for these language codes, comma for all others;
+// extend the list when a device language shows the wrong sign.
+const POINT_LANGUAGES = ['en', 'zh', 'ja', 'ko'];
+let decimalSign: ',' | '.' = ',';
+
+/** Picks the decimal sign for a device language code such as "nl_BE", "en" or "zh_CN". */
+export function setLanguage(code: string): void {
+  decimalSign = POINT_LANGUAGES.includes(code.slice(0, 2).toLowerCase())
+    ? '.'
+    : ',';
+}
+export const getDecimalSign = () => decimalSign;
+
+/** "-1234567.5" → "-1 234 567,5": groups the integer part, uses the local decimal sign. */
+function localize(plain: string): string {
+  const [int, frac] = plain.split('.');
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, THOUSANDS);
+  return frac === undefined ? grouped : grouped + decimalSign + frac;
+}
 
 /** Binary operators. `ⁿ√` takes the n-th root: `3 ⁿ√ 8` = 2. */
 export type BinOp = '+' | '−' | '×' | '÷' | '^' | 'ⁿ√';
@@ -201,8 +223,8 @@ export const superscript = (s: string) =>
   s.replace(/[0-9-]/g, ch => SUPERSCRIPT[ch]);
 
 /**
- * Formats a result: decimal comma, at most 12 significant digits, and scientific
- * notation (`4,5261 × 10²`) outside 10⁻⁶ … 10¹² or when `sci` is on.
+ * Formats a result: thousands grouped, local decimal sign, at most 12 significant digits,
+ * and scientific notation (`4,5261 × 10²`) outside 10⁻⁶ … 10¹² or when `sci` is on.
  */
 export function formatNumber(x: number, sci = false): string {
   if (x === 0) {
@@ -211,12 +233,13 @@ export function formatNumber(x: number, sci = false): string {
   const abs = Math.abs(x);
   let text: string;
   if (!sci && abs >= 1e-6 && abs < 1e12) {
-    text = String(Number(x.toPrecision(12)));
+    text = localize(String(Number(x.toPrecision(12))));
   } else {
     const [mantissa, exponent] = x.toExponential(11).split('e');
-    text = `${Number(mantissa)} × 10${superscript(String(Number(exponent)))}`;
+    const power = superscript(String(Number(exponent)));
+    text = `${localize(String(Number(mantissa)))} × 10${power}`;
   }
-  return text.replace('.', ',').replace('-', MINUS);
+  return text.replace('-', MINUS);
 }
 
 const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
@@ -378,7 +401,7 @@ export function entryValue(e: NumEntry): number {
 
 /** How the typed number looks, e.g. `45261×10⁻²`. */
 export function entryText(e: NumEntry): string {
-  const mant = (e.mant || '0').replace('.', ',');
+  const mant = localize(e.mant || '0');
   const exp =
     e.exp === null ? '' : `×10${e.exp === '' ? 'ⁿ' : superscript(e.exp)}`;
   return (e.neg ? MINUS : '') + mant + exp;
